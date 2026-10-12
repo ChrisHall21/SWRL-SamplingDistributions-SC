@@ -2,7 +2,7 @@
 title: "Foundations for inference - Sampling distributions"
 output: 
     bookdown::html_document2
-author: "Your Name Goes Here"
+author: "Chris Hall"
 css: "lab.css"
 date: 'Last compiled: `r format(Sys.time(), "%B %d, %Y at %X")`'
 ---
