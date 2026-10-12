@@ -83,7 +83,7 @@ ___________
 </ol>
 
 <div id="answer">
-Type your answer to Question 1 here and delete this sentence.
+Answer Choice B is false because 50% of houses in Ames are smaller than 1,499.69 square feet. 50% of houses in Ames is smaller than 1442 square feet.
 
 
 </div>
