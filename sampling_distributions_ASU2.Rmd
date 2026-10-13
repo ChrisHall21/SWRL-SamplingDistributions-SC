@@ -83,7 +83,7 @@ ___________
 </ol>
 
 <div id="answer">
-Answer Choice B is false because 50% of houses in Ames are smaller than 1,499.69 square feet. 50% of houses in Ames is smaller than 1442 square feet.
+Answer Choice B is false because 50% of houses in Ames aren't smaller than 1,499.69 square feet. 50% of houses in Ames is smaller than 1442 square feet given by our median.
 
 
 </div>
@@ -112,11 +112,23 @@ ________
 
 ```{r, label = "samp1-dist"}
 # Type your code for the Exercise  1 here, and Knit.
+ggplot(data = samp1, aes(x = area)) +
+  geom_histogram(fill = "lightblue", binwidth = 250, color = "black") +
+  theme_bw() +
+  labs(x = "Square Feet")
 
+SUMSTAT <- samp1 |>
+  summarize(samp_mean = mean(area), samp_med = median(area),
+            SD = sd(area), samp_iqr = IQR(area),
+            samp_min = min(area), samp_max = max(area),
+            samp_q1 = quantile(area, 0.25),
+            samp_q3 = quantile(area, 0.75),
+            G_1 = e1071::skewness(area))
+knitr::kable(SUMSTAT, caption = "Summary statistics", col.names = c("$\\bar{x}$", "$\\hat{\\theta}$", "$\\hat{\\sigma}$", "$\\text{IQR}$", "$\\text{MIN}$", "$\\text{MAX}$", "$\\text{Q}_1$", "$\\text{Q}_3$", "$\\text{G}_1$"))
 ```
 
 <div id="answer">
-Type your answer for **Exercise 1** here and delete this sentence.
+The distribution of the `area` in `samp1` is unimodal and skewed to the `r ifelse(SUMSTAT$G_1 < 0, "left", "right")`(See figure \@ref(fig:samp1-dist)). The sample median and IQR are `r comma(SUMSTAT$samp_med)` $\text{ft}^2$ and `r comma(SUMSTAT$samp_iqr)` $\text{ft}^2$, which are similar to the population median and IQR (`r comma(POP$pop_med)` $\text{ft}^2$ and `r comma(POP$pop_iqr)` $\text{ft}^2$). See Table \@ref(tab:stats) for more statistics.
 
 
 When reporting area be sure to report with proper units.  That is, $\text{ft}^2$.
@@ -144,7 +156,7 @@ _________
 </ol>
 
 <div id="answer">
-Type your answer for Question 2 here and delete this sentence.
+Answer choice `C.` of sample size 1000. The reason being as variability as expression(bar(x)) goes down as sample size increases.
 
 
 </div>
