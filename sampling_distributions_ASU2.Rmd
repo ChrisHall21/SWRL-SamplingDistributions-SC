@@ -128,7 +128,7 @@ knitr::kable(SUMSTAT, caption = "Summary statistics", col.names = c("$\\bar{x}$"
 ```
 
 <div id="answer">
-The distribution of the `area` in `samp1` is unimodal and skewed to the `r ifelse(SUMSTAT$G_1 < 0, "left", "right")`(See figure \@ref(fig:samp1-dist)). The sample median and IQR are `r comma(SUMSTAT$samp_med)` $\text{ft}^2$ and `r comma(SUMSTAT$samp_iqr)` $\text{ft}^2$, which are similar to the population median and IQR (`r comma(POP$pop_med)` $\text{ft}^2$ and `r comma(POP$pop_iqr)` $\text{ft}^2$). See Table \@ref(tab:stats) for more statistics.
+The distribution of the `area` in `samp1` is unimodal and skewed to the `r ifelse(SUMSTAT$G_1 < 0, "left", "right")`(See figure \@ref(fig:samp1-dist)). The sample median and IQR are `r comma(SUMSTAT$samp_med)` $\text{ft}^2$ and $\text{ft}^2$, which are similar to the population median and IQR (`r comma(POP$pop_med)` $\text{ft}^2$ and `r comma(POP$pop_iqr)` $\text{ft}^2$). See Table \@ref(tab:stats) for more statistics.
 
 
 When reporting area be sure to report with proper units.  That is, $\text{ft}^2$.
@@ -156,7 +156,7 @@ _________
 </ol>
 
 <div id="answer">
-Answer choice `C.` of sample size 1000. The reason being as variability as expression(bar(x)) goes down as sample size increases.
+Answer choice `C.` of sample size 1000. The reason being as variability as $\bar{x}$ goes down as sample size increases.
 
 
 </div>
@@ -196,16 +196,19 @@ ___________________
 
 ```{r, label = "ANSques"}
 # Type your code for the Exercise 2 here, and Knit.
-
+dim(sample_means50)[1]
 ```
 
 ```{r label = "sampling-dist", fig.cap = "Sampling distribution of the sample mean ($\\bar{x}$)"}
 # Type your code for the Exercise 2 here, and Knit.
-
+XB <- round(mean(sample_means50$x_bar), 4)          # Mean 
+SD <- round(sd(sample_means50$x_bar), 4)            # Standard deviation
+c(XB, SD)
 ```
 
 <div id="answer">
-Type your answer for **Exercise 2** here and delete this sentence.
+There are **15,000** rows in `sample_mean50`.
+The sampling distribution of $\bar{x}$ is unimodal and skewed to the right (0.199997); it has a mean of 1,500 $\text{ft}^2$ and a standard deviation of 72 $\text{ft}^2$.
 
 
 </div>
@@ -238,11 +241,15 @@ ________
 
 ```{r, label = "practice-sampling-dist"}
 # Type your code for the Exercise 3 here, and Knit.
-
+sample_means_small <- ames |>
+                    rep_sample_n(size = 10, reps = 25, replace = TRUE) |>
+                    group_by(replicate) |>
+                    summarize(x_bar = mean(area))
+sample_means_small
 ```
 
 <div id="answer">
-Type your answer for **Exercise 3** here and delete this sentence.
+The dimensions of `sample_mean_small` are 25 by 2.Each of the 25 means in the **x_bar** column is computed from a different random sample size of 10.
 
 
 </div>
@@ -260,11 +267,11 @@ ____________
 
 ```{r, label = "sample-means-small"}
 # Type your code for Question 3 here, and Knit.
-
+dim(sample_means_small)[1]
 ```
 
 <div id="answer">
-Type your answer for Question 3 here and delete this sentence.
+The correct answer choice is `C.`. There are 25 rows with each entry in the **x_bar** column being a mean computed from a different random sample of size 10.
 
 
 </div>
@@ -279,7 +286,7 @@ ________________
 </ol>
 
 <div id="answer">
-Type your answer for Question 4 here and delete this sentence.
+The correct answer is `A.`, each element represents a mean square footage from a simple random sample of 10 houses.
 
 
 </div>
@@ -314,7 +321,7 @@ knitr::include_app("https://alanarnholt.shinyapps.io/SamplingDist/", height = "8
 ```
 
 <div id="answer">
-Type your answer for **Exercise 4** here and delete this sentence.
+Each observation represents the mean of a random sample of size 𝑛. As the sample size 𝑛 increases, the center of the sampling distribution stays the same but the variability in the sampling distribution (standard error) shrinks. The shape of the sampling distribution approaches a normal distribution as the sample size 𝑛 increases. Increasing the number of simulations has no visible impact on the above descriptions.
 
 
 </div>
@@ -329,7 +336,7 @@ __________
 </ol>
 
 <div id="answer">
-Type your answer for Question 5 here and delete this sentence.
+The correct answer choice is `A.`, as the sample size increases the variability of the sampling distribution **decreases**.
 
 
 </div>
@@ -342,11 +349,16 @@ ________
 
 ```{r, label = "price-sample"}
 # Type your code for Exercise 5 here, and Knit.
-
+ss50 <- ames |>
+  sample_n(size = 50) |> 
+  select(price) |> 
+  summarize(xbar = mean(price)) |> 
+  pull()
+ss50
 ```
 
 <div id="answer">
-Type your answer for Exercise 5 here and delete this sentence.
+The best estimate of the population mean is the sample mean ($\bar{x}$ = $178,011).
 
 
 </div>
@@ -359,11 +371,24 @@ _____________
 
 ```{r, label = "price-sampling"}
 # Type your code for Exercise 6 here, and Knit.
+sample_means50 <- ames |>
+                    rep_sample_n(size = 50, reps = 5000, replace = TRUE) |>
+                    group_by(replicate) |> 
+                    summarize(x_bar = mean(price))
 
+ggplot(data = sample_means50, aes(x = x_bar)) +
+  geom_histogram(binwidth = 2000, fill = "lightgreen", color = "black") + 
+  theme_bw() + 
+  labs(x = expression(bar(x)[price]))
+
+sample_means50 |> 
+  summarize(mu_xbar = mean(x_bar), sigma_xbar = sd(x_bar))
+sample_mu50 <- sample_means50 |> 
+  summarize(mu_xbar = mean(x_bar))
 ```
 
 <div id="answer">
-Type your answer for **Exercise 6** here and delete this sentence.
+The simulated sampling distribution of the sample means is unimodal with a right skewness (**ASK HOW TO ADD SKEWNESS**). I would use the mean of the simulated sampling distribution `r comma(sample_mu50$mu_xbar)` to estimate the population mean (known to be μ = `r comma(sample_mu50$mu_xbar)`)
 
 
 </div>
